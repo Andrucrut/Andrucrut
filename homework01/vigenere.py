@@ -44,7 +44,7 @@ def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
         else:
             plaintext += chr((ord(j) - ord(keyword[i])) % 26 + 65)
     return plaintext
-=======
+
 def encrypt_vigenere(plaintext: str, keyword: str) -> str:
     """
     Encrypts plaintext using a Vigenere cipher.
@@ -59,7 +59,7 @@ def encrypt_vigenere(plaintext: str, keyword: str) -> str:
     keyword *= len(plaintext) // len(keyword) + 1
     ciphertext = ""
     for i, j in enumerate(plaintext):
-        if (keyword[i] == 'a' or keyword[i] == "A"):
+        if keyword[i] == 'a' or keyword[i] == "A":
             ciphertext += j
         else:
             bukva = (ord(j) + ord(keyword[i]))
