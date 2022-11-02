@@ -1,28 +1,27 @@
+alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+encrypt = True
+result=''
 def encrypt_vigenere(plaintext: str, keyword: str) -> str:
-    """
-    Encrypts plaintext using a Vigenere cipher.
-    >>> encrypt_vigenere("PYTHON", "A")
-    'PYTHON'
-    >>> encrypt_vigenere("python", "a")
-    'python'
-    >>> encrypt_vigenere("ATTACKATDAWN", "LEMON")
-    'LXFOPVEFRNHR'
-    """
+     for i in range(len(plaintext)):
+        letter_n = alphabet.index(plaintext[i])
+        key_n = alphabet.index(keyword[i % len(keyword)])
 
-    keyword *= (
-        len(plaintext) // len(keyword) + 1
-    )  # Мы подгоняем кол-во символов в ключе к кол-во символом в тексте
-    ciphertext = ""
-    for i, j in enumerate(plaintext):  # i = index  j=bukva
-        if (
-            keyword[i] == "a" or keyword[i] == "A"
-        ):  # если у нас в ключе будет буква A, то закадируется также A
-            ciphertext += j
+        if encrypt:
+            value = (letter_n + key_n) % len(alphabet)
         else:
-            ciphertext += chr(
-                (ord(j) + ord(keyword[i])) % 26 + 65
-            )  # сумму остаток от деления на 26 и прибовляем 65(для того чтобы не выходило из таблицы)
-    return ciphertext
+            value = (letter_n - key_n) % len(alphabet)
+
+        result += alphabet[value]
+
+    return result
+
+
+def vigenere_encrypt(text, key):
+    return vigenere(text=text, key=key, encrypt=True)
+
+
+def vigenere_decrypt(text, key):
+    return vigenere(text=text, key=key, encrypt=False)
 
 
 def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
@@ -86,3 +85,4 @@ def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
             bukva = (ord(j) - ord(keyword[i]))
             plaintext += chr(bukva % 26 + 65)
     return plaintext
+

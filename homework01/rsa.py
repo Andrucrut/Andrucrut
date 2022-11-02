@@ -12,10 +12,7 @@ def is_prime(n: int) -> bool:
     >>> is_prime(8)
     False
     """
-    for i in range(2, n):
-        if n % i == 0:
-            return False
-    return True
+    return n > 1 and all(n % i != 0 for i in range(2, int(n**0.5) + 1))
 
 
 def gcd(a: int, b: int) -> int:
@@ -26,10 +23,12 @@ def gcd(a: int, b: int) -> int:
     >>> gcd(3, 7)
     1
     """
-    if b == 0:
-        return a
-    else:
-        return gcd(b, a % b)
+    while a != 0 and b != 0:
+        if a > b:
+            a = a % b
+        else:
+            b = b % a
+    return a + b
 
 
 def multiplicative_inverse(e: int, phi: int) -> int:
@@ -40,17 +39,18 @@ def multiplicative_inverse(e: int, phi: int) -> int:
     23
     """
 
-    # PUT YOUR CODE Here
-    d = 0
-    while True:
-        if d * e % phi == 1:
-            return d
-        d += 1
+    def gcd_extended(a, b):
+        if a == 0:
+            return b, 0, 1
+        else:
+            d, y, x = gcd_extended(b % a, a)
+            return d, x - y * (b // a), y
+
+    d, x, y = gcd_extended(e, phi)
+    return x % phi
 
 
-def generate_keypair(
-    p: int, q: int
-) -> tp.Tuple[tp.Tuple[int, int], tp.Tuple[int, int]]:
+def generate_keypair(p: int, q: int) -> tp.Tuple[tp.Tuple[int, int], tp.Tuple[int, int]]:
     if not (is_prime(p) and is_prime(q)):
         raise ValueError("Both numbers must be prime.")
     elif p == q:
@@ -114,4 +114,4 @@ if __name__ == "__main__":
     print("Decrypting message with public key ", public, " . . .")
     print("Your message is:")
     print(decrypt(public, encrypted_msg))
-    
+
