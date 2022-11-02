@@ -1,66 +1,3 @@
-alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-encrypt = True
-result=''
-def encrypt_vigenere(plaintext: str, keyword: str) -> str:
-<<<<<<< HEAD
-     for i in range(len(plaintext)):
-        letter_n = alphabet.index(plaintext[i])
-        key_n = alphabet.index(keyword[i % len(keyword)])
-
-        if encrypt:
-            value = (letter_n + key_n) % len(alphabet)
-        else:
-            value = (letter_n - key_n) % len(alphabet)
-
-        result += alphabet[value]
-
-    return result
-
-
-def vigenere_encrypt(text, key):
-    return vigenere(text=text, key=key, encrypt=True)
-
-
-def vigenere_decrypt(text, key):
-    return vigenere(text=text, key=key, encrypt=False)
-=======
-    ciphertext = ""
-    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    alphabet_low = alphabet.lower()
-    key_length = len(keyword)
-
-    for i in range(len(plaintext)):
-        if plaintext[i] in alphabet:
-            shift = ord(keyword[i % key_length]) - ord("A")
-            ciphertext += alphabet[(alphabet.find(plaintext[i]) + shift) % 26]
-        elif plaintext[i] in alphabet_low:
-            shift = ord(keyword[i % key_length]) - ord("a")
-            ciphertext += alphabet_low[(alphabet_low.find(plaintext[i]) + shift) % 26]
-        else:
-            ciphertext += plaintext[i]
-
-    return ciphertext
->>>>>>> afbc1ae0dbe194732a292ec69f4f22927a4aa3d1
-
-
-def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
-    plaintext = ""
-    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    alphabet_low = alphabet.lower()
-    key_length = len(keyword)
-
-    for i in range(len(ciphertext)):
-        if ciphertext[i] in alphabet:
-            shift = ord(keyword[i % key_length]) - ord("A")
-            plaintext += alphabet[(alphabet.find(ciphertext[i]) - shift) % 26]
-        elif ciphertext[i] in alphabet_low:
-            shift = ord(keyword[i % key_length]) - ord("a")
-            plaintext += alphabet_low[(alphabet_low.find(ciphertext[i]) - shift) % 26]
-        else:
-            plaintext += ciphertext[i]
-
-    return plaintext
-
 def encrypt_vigenere(plaintext: str, keyword: str) -> str:
     """
     Encrypts plaintext using a Vigenere cipher.
@@ -71,16 +8,34 @@ def encrypt_vigenere(plaintext: str, keyword: str) -> str:
     >>> encrypt_vigenere("ATTACKATDAWN", "LEMON")
     'LXFOPVEFRNHR'
     """
-
-    keyword *= len(plaintext) // len(keyword) + 1
     ciphertext = ""
-    for i, j in enumerate(plaintext):
-        if keyword[i] == 'a' or keyword[i] == "A":
-            ciphertext += j
+    s = "abcdefghijklmnopqrstuvwxyz"
+    for i in range(len(plaintext)):
+        if plaintext[i].isalpha() == True:
+            if plaintext[i] in s:
+                if keyword[i % len(keyword)] in s:
+                    h = s[(s.find(plaintext[i]) + s.find(keyword[i % len(keyword)])) % 26]
+                    ciphertext += h
+                if keyword[(i % len(keyword))] in s.upper():
+                    h = s[(s.find(plaintext[i]) + s.find(keyword[i % len(keyword)].lower())) % 26]
+                    ciphertext += h
+            if plaintext[i] in s.upper():
+                if keyword[i % len(keyword)] in s:
+                    h = s[
+                        (s.find(plaintext[i].lower()) + s.find(keyword[i % len(keyword)])) % 26
+                    ].upper()
+                    ciphertext += h
+                if keyword[(i % len(keyword))] in s.upper():
+                    h = s[
+                        (s.find(plaintext[i].lower()) + s.find(keyword[i % len(keyword)].lower()))
+                        % 26
+                    ].upper()
+                    ciphertext += h
         else:
-            bukva = (ord(j) + ord(keyword[i]))
-            ciphertext += chr(bukva % 26 + 65)
+            ciphertext += plaintext[i]
+
     return ciphertext
+
 
 def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
     """
@@ -92,14 +47,29 @@ def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
     >>> decrypt_vigenere("LXFOPVEFRNHR", "LEMON")
     'ATTACKATDAWN'
     """
-
-    keyword *= len(ciphertext) // len(keyword) + 1
     plaintext = ""
-    for i, j in enumerate(ciphertext):
-        if (keyword[i] == 'a' or keyword[i] == "A"):
-            plaintext += j
+    s = "abcdefghijklmnopqrstuvwxyz"
+    for i in range(len(ciphertext)):
+        if ciphertext[i].isalpha() == True:
+            if ciphertext[i] in s:
+                if keyword[i % len(keyword)] in s:
+                    h = s[(s.find(ciphertext[i]) - s.find(keyword[i % len(keyword)])) % 26]
+                    plaintext += h
+                if keyword[(i % len(keyword))] in s.upper():
+                    h = s[(s.find(ciphertext[i]) - s.find(keyword[i % len(keyword)].lower())) % 26]
+                    plaintext += h
+            if ciphertext[i] in s.upper():
+                if keyword[i % len(keyword)] in s:
+                    h = s[
+                        (s.find(ciphertext[i].lower()) - s.find(keyword[i % len(keyword)])) % 26
+                    ].upper()
+                    plaintext += h
+                if keyword[(i % len(keyword))] in s.upper():
+                    h = s[
+                        (s.find(ciphertext[i].lower()) - s.find(keyword[i % len(keyword)].lower()))
+                        % 26
+                    ].upper()
+                    plaintext += h
         else:
-            bukva = (ord(j) - ord(keyword[i]))
-            plaintext += chr(bukva % 26 + 65)
-    return plaintext
-
+            plaintext += ciphertext[i]
+    return 
