@@ -22,10 +22,16 @@ class Session:
         max_retries: int = 3,
         backoff_factor: float = 0.3,
     ) -> None:
-        pass
+        self.base_url=base_url
+        self.timeut=timeout
+        self.request_session = requests.Session()
 
-    def get(self, url: str, *args: tp.Any, **kwargs: tp.Any) -> requests.Response:
-        pass
+    def get(self, url, **kwargs: tp.Any) -> requests.Response:
+        full_url = f"{self.base_url}/{url}"
+        response=self.request_session.get(url=full_url,params=kwargs,timeout=self.timeut)
+        return response
 
-    def post(self, url: str, *args: tp.Any, **kwargs: tp.Any) -> requests.Response:
-        pass
+    def post(self, url, data=None, json=None, **kwargs: tp.Any) -> requests.Response:
+        full_url = f"{self.base_url}/{url}"
+        response=self.request_session.post(url=full_url,data=kwargs,timeout=self.timeut)
+        return response
